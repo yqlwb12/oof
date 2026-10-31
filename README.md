@@ -50,6 +50,11 @@ Three passes, in order:
 | `+++++` | `+ x5` | one addition instead of five |
 | `[-]` / `[+]` | `Z` | assign zero, no loop at all |
 | `[->+<]` | `M +1@+1` | multiply-move: `tape[p+1] += tape[p]; tape[p] = 0` |
+| `[+>+<]` | `M -1@+1` | a `+` guard runs `256 - v` times, so the step flips sign |
+
+That last row is the one that bites. `[+>+<]` starting from five runs 251 times, not
+five, so the multiplier is `-1` and not `+1`. It stays invisible until someone writes
+the incrementing guard, which is why the corpus carries two of them.
 
 `M` carries `(offset, delta)` pairs, so `[->>+++<<]` collapses into one instruction
 too. Loops whose bodies contain I/O or nested loops are left alone — the pass only
@@ -81,10 +86,11 @@ oof: unmatched '[' (at instruction 1)
 $ PYTHONPATH=src python -m unittest discover -s tests -v
 ```
 
-28 tests. The important one is `test_optimiser_preserves_output`: a corpus of seven
+31 tests. The important one is `test_optimiser_preserves_output`: a corpus of nine
 programs (Hello World, an echo, a nested-loop multiplier, a cell that wraps through
-255) run with `optimize=True` and `optimize=False` on two different inputs, with the
-outputs compared. A peephole pass without that test is a rumour.
+255, two incrementing guards) run with `optimize=True` and `optimize=False` on two
+different inputs, with the outputs compared. A peephole pass without that test is a
+rumour.
 
 ## Licence
 

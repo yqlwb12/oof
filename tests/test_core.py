@@ -22,6 +22,8 @@ CORPUS = [
     "+++++[>++++<-]>[->>+<<]>>.",        # multiply twice, nested moves
     "++[>++[>++<-]<-]>>.",               # nested loops
     "+[>+<-]>.",                         # one multiply, one print
+    "+++++[+>+<]>.",                     # incrementing guard, runs 251 times
+    "++++[+>++<]>>.",                    # incrementing guard, wider body
 ]
 
 
@@ -88,6 +90,19 @@ class RunTest(unittest.TestCase):
     def test_wraps_at_256(self):
         self.assertEqual(run("-."), chr(255))
         self.assertEqual(run("+" * 256 + "."), "\x00")
+
+    def test_incrementing_guard_counts_backwards(self):
+        # value 5 in cell 0 means 251 trips round the loop, so cell 1 ends at 251
+        self.assertEqual(run("+++++[+>+<]>."), chr(251))
+
+    def test_incrementing_guard_multiplies_by_a_negative_step(self):
+        program = compile_source("[+>+<]")
+        self.assertEqual(program[0][0], "M")
+        self.assertEqual(program[0][1], ((1, 255),))
+
+    def test_decrementing_guard_multiplies_by_a_positive_step(self):
+        program = compile_source("[->+<]")
+        self.assertEqual(program[0][1], ((1, 1),))
 
     def test_tape_wraps_by_default(self):
         # Two cells: stepping right from the last one lands back on the first.

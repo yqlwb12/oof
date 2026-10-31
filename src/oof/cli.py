@@ -11,11 +11,18 @@ from .core import BrainfuckError, compile_source, run
 __version__ = "0.1.0"
 
 
+def _signed(delta: int) -> int:
+    """Deltas are stored mod 256; print them the way a human reads them."""
+    return delta - 256 if delta > 127 else delta
+
+
 def _describe(program: list) -> str:
     lines = []
     for index, (code, arg) in enumerate(program):
         if code == "M":
-            factors = " ".join("%+d@%+d" % (delta, offset) for offset, delta in arg)
+            factors = " ".join(
+                "%+d@%+d" % (_signed(delta), offset) for offset, delta in arg
+            )
             lines.append("%4d  M  %s" % (index, factors))
         elif code in "[]":
             lines.append("%4d  %s  -> %d" % (index, code, arg))

@@ -91,7 +91,12 @@ def _loop_is_multiplicative(body: list) -> bool:
 
 
 def _factors(body: list) -> tuple:
-    """Collapse ``[->+<]``-style bodies into (offset, delta) pairs."""
+    """Collapse ``[->+<]``-style bodies into (offset, delta) pairs.
+
+    A ``+`` guard runs the body ``256 - value`` times rather than ``value``
+    times, which is the same as stepping by ``-delta`` -- so the sign flips.
+    Getting this wrong is invisible until someone writes ``[+>+<]``.
+    """
     offset = 0
     tally = {}
     for code, arg in body[1:]:
@@ -103,7 +108,14 @@ def _factors(body: list) -> tuple:
             tally[offset] = tally.get(offset, 0) + arg
         elif code == "-":
             tally[offset] = tally.get(offset, 0) - arg
-    return tuple(sorted((off, delta) for off, delta in tally.items() if delta % 256))
+
+    sign = -1 if body[0][0] == "+" else 1
+    factors = []
+    for offset, delta in tally.items():
+        delta = (delta * sign) % 256
+        if delta:
+            factors.append((offset, delta))
+    return tuple(sorted(factors))
 
 
 def optimize_ops(ops: list) -> list:
