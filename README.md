@@ -2,6 +2,10 @@
 
 [![tests](https://github.com/yqlwb12/oof/actions/workflows/ci.yml/badge.svg)](https://github.com/yqlwb12/oof/actions/workflows/ci.yml)
 
+> **Experimental project, for reference and learning only.**
+> Published as-is, with no warranty of correctness or fitness for purpose.
+> 本项目仅供参考与实验用途，不保证可靠性；生产使用前请自行充分测试。
+
 **Brainfuck, with a peephole pass that earns its keep.** Eight instructions, a tape of bytes, no dependencies.
 
 ```console
@@ -91,6 +95,24 @@ programs (Hello World, an echo, a nested-loop multiplier, a cell that wraps thro
 255, two incrementing guards) run with `optimize=True` and `optimize=False` on two
 different inputs, with the outputs compared. A peephole pass without that test is a
 rumour.
+
+## Disclaimer
+
+This repository is a personal experiment, published for reference and learning.
+It is not production software.
+
+- **No warranty.** Provided "as is", without warranty of any kind, exactly as the
+  licence says. Correctness, fitness for purpose and safety are not guaranteed.
+- **Expect changes.** Interfaces, output formats and behaviour may change without
+  notice; the test suite describes what the code does today, not a promise about
+  tomorrow.
+- **Verify before you rely on it.** Read the code, run the tests, and check the
+  results yourself in your own environment.
+
+The optimiser is interesting, not certified. It is tested against a corpus, not proven equivalent, and nothing stops a program it is given from looping forever.
+
+本项目仅供学习、参考与实验使用，作者不对其可靠性、准确性与适用性作出任何保证。
+在生产环境使用或对外提供服务之前，请自行充分审查代码、评估风险并完成测试。
 
 ## Licence
 
