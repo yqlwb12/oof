@@ -1,5 +1,7 @@
 # oof
 
+[![tests](https://github.com/yqlwb12/oof/actions/workflows/ci.yml/badge.svg)](https://github.com/yqlwb12/oof/actions/workflows/ci.yml)
+
 **Brainfuck, with a peephole pass that earns its keep.** Eight instructions, a tape of bytes, no dependencies.
 
 ```console
